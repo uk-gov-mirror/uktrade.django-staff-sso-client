@@ -74,7 +74,7 @@ def test_callback_view_token(mocked_get_client, rf):
     mocked_get_client.return_value.fetch_token.return_value = {'token': 'test'}
     url = reverse('authbroker:callback')
     request = rf.get(url)
-    request.user = AnonymousUser
+    request.user = AnonymousUser()
     request.session = StubSessionBackend({f'{TOKEN_SESSION_KEY}_oauth_state': 'state'})
     request.GET = {'code': 'foo'}
     response = AuthCallbackView.as_view()(request)
@@ -88,7 +88,7 @@ def test_callback_view_token_with_next_url(mocked_get_client, rf):
     mocked_get_client.return_value.fetch_token.return_value = {'token': 'test'}
     url = reverse('authbroker:callback')
     request = rf.get(url)
-    request.user = AnonymousUser
+    request.user = AnonymousUser()
     request.session = StubSessionBackend({
         f'{TOKEN_SESSION_KEY}_oauth_state': 'state',
         REDIRECT_SESSION_FIELD_NAME: '/go-here-after-authenticating/'
@@ -105,7 +105,7 @@ def test_callback_view_token_with_unsafe_next_url(mocked_get_client, rf):
     mocked_get_client.return_value.fetch_token.return_value = {'token': 'test'}
     url = reverse('authbroker:callback')
     request = rf.get(url)
-    request.user = AnonymousUser
+    request.user = AnonymousUser()
     request.session = StubSessionBackend({
         f'{TOKEN_SESSION_KEY}_oauth_state': 'state',
         REDIRECT_SESSION_FIELD_NAME: 'https://danger.com/'
@@ -138,6 +138,7 @@ def test_callback_user_already_authenticated(mocked_get_client, rf, django_user_
     assert not mocked_get_client.called
 
 # Cache based tests
+
 
 def _state_key(state):
     return f'_authbroker_oauth_state_{state}'
